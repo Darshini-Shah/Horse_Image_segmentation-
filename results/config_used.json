@@ -1,0 +1,75 @@
+{
+  "results_dir": "results",
+  "split_seed": 42,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "data": {
+    "root": "data/raw",
+    "cache": "data/cache_256.npz",
+    "img_size": 256,
+    "split": {
+      "train": 0.7,
+      "val": 0.15,
+      "test": 0.15
+    },
+    "stratify_bins": 3
+  },
+  "model": {
+    "base_channels": 32,
+    "depth": 4
+  },
+  "train": {
+    "epochs": 120,
+    "batch_size": 8,
+    "lr": 0.001,
+    "loss": "bce_dice",
+    "w_bce": 1.0,
+    "w_dice": 1.0,
+    "weight_decay": 0.0001,
+    "patience": 40,
+    "amp": true,
+    "augment": {
+      "enabled": true,
+      "hflip": true,
+      "scale": [
+        0.85,
+        1.15
+      ],
+      "rotate_deg": 10,
+      "translate": 0.08,
+      "brightness": 0.2,
+      "contrast": 0.2,
+      "saturation": 0.2
+    }
+  },
+  "tuning": {
+    "enabled": true,
+    "seed": 0,
+    "epochs": 50,
+    "loss_candidates": [
+      "bce",
+      "dice",
+      "bce_dice"
+    ],
+    "loss_models": [
+      "baseline_noskip",
+      "p1_concat_interp"
+    ],
+    "loss_lr": 0.001,
+    "lr_candidates": [
+      0.003,
+      0.001,
+      0.0003
+    ],
+    "lr_selection": "shared"
+  },
+  "eval": {
+    "threshold": 0.5,
+    "boundary_tol": 2,
+    "band_width": 3,
+    "n_bootstrap": 10000
+  }
+}

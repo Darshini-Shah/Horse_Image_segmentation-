@@ -1,0 +1,5 @@
+model,params,size_mb,infer_ms,train_time_s,best_epoch,val_dice
+Baseline (no skip),6457441,24.633,5.954,113.000,38.000,0.919
+P1: Concat skip,7240801,27.621,7.135,127.100,40.000,0.934
+P2: Additive skip,6457441,24.633,6.176,114.400,38.000,0.932
+P3: Concat + TransConv,7763041,29.614,12.069,111.200,38.000,0.934

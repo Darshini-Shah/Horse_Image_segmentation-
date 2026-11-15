@@ -1,0 +1,7 @@
+variant,p1_concat_interp,p2_add_interp,p3_concat_tconv
+none dropped,0.8997,0.8877,0.8961
+drop L1,0.8980,0.8834,0.8943
+drop L2,0.8863,0.8700,0.8837
+drop L3,0.8403,0.8390,0.8164
+drop L4,0.8719,0.8638,0.8598
+drop all,0.6706,0.6643,0.6909

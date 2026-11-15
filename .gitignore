@@ -1,0 +1,6 @@
+data/raw/
+data/cache_*.npz
+data/dummy/
+results*/checkpoints/
+results*/predictions/
+__pycache__/

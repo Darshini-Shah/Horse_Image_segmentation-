@@ -1,0 +1,5 @@
+model,err_band,err_far
+Baseline (no skip),2.5046,0.8164
+P1: Concat skip,1.8872,0.8719
+P2: Additive skip,1.9195,1.2057
+P3: Concat + TransConv,1.9675,0.8874

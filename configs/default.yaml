@@ -1,0 +1,53 @@
+# Full experiment (about 2-3 h on a Colab T4 GPU).
+results_dir: results
+split_seed: 42            # fixes the train/val/test split (same for every model)
+seeds: [0, 1, 2]          # training seeds -> mean ± std in every table
+
+data:
+  root: data/raw          # any folder containing the horse/ and mask/ folders
+  cache: data/cache_256.npz
+  img_size: 256           # problem statement: resize every image to 256 x 256
+  split: {train: 0.70, val: 0.15, test: 0.15}   # ~229 / 49 / 49 images
+  stratify_bins: 3        # stratify the split by horse-size tercile
+
+model:
+  base_channels: 32       # 32-64-128-256-512 channels
+  depth: 4                # 4 down / 4 up steps: 256 -> 16 at the bottleneck
+
+train:
+  epochs: 120
+  batch_size: 8
+  lr: 0.001               # used only if tuning is disabled
+  loss: bce_dice          # used only if tuning is disabled
+  w_bce: 1.0
+  w_dice: 1.0
+  weight_decay: 0.0001
+  patience: 40            # early stopping on validation Dice
+  amp: true               # mixed precision on GPU (faster on T4)
+  augment:                # identical for all models
+    enabled: true
+    hflip: true
+    scale: [0.85, 1.15]
+    rotate_deg: 10
+    translate: 0.08
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+
+tuning:
+  enabled: true
+  seed: 0
+  epochs: 50
+  # stage A: loss selection (fixed lr), on baseline + main proposed model
+  loss_candidates: [bce, dice, bce_dice]
+  loss_models: [baseline_noskip, p1_concat_interp]
+  loss_lr: 0.001
+  # stage B: learning-rate sweep for all four models
+  lr_candidates: [0.003, 0.001, 0.0003]
+  lr_selection: shared    # shared = one LR for all models (same settings); or per_model
+
+eval:
+  threshold: 0.5          # fixed a priori, not tuned on test
+  boundary_tol: 2         # px tolerance for Boundary F1
+  band_width: 3           # px band around the true outline for the error split
+  n_bootstrap: 10000
